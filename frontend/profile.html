@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <!-- <link rel="stylesheet" href="./CSS/style.css"> -->
+    <style>
+        .navbar {
+            width: 100%;
+            padding: 15px 5%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-brand {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111827;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links button {
+            margin-left: 15px;
+            padding: 8px 20px;
+            border: 1px solid #e5e7eb;
+            background: transparent;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links button:hover {
+            border-color: #4f46e5;
+            color: #4f46e5;
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .nav-links button:last-child:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .main-container {
+            padding-top: 100px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f9fafb;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(79, 70, 229, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.03) 0%, transparent 20%);
+        }
+
+        .profile-card {
+            background: white;
+            width: 100%;
+            max-width: 380px;
+            border-radius: 20px;
+            text-align: center;
+            padding: 0 30px 40px 30px;
+            margin-top: 30px;
+            box-shadow:
+                0 20px 40px -10px rgba(0, 0, 0, 0.1),
+                0 0 1px rgba(0, 0, 0, 0.1);
+
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            margin: -50px auto 20px auto;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid white;
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .profile-avatar span {
+            color: white;
+            font-size: 40px;
+            font-weight: 600;
+        }
+
+        .profile-card h2 {
+            color: #1f2937;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .profile-card #p-role {
+            color: #6b7280 !important;
+            font-size: 13px;
+            letter-spacing: 1.5px !important;
+            background: #f3f4f6;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-top: 5px;
+        }
+
+        .profile-card hr {
+            margin: 25px 0 !important;
+            border-top: 1px dashed #e5e7eb !important;
+        }
+
+        .profile-card p {
+            color: #374151;
+            font-size: 15px;
+        }
+
+        .profile-card p span {
+            color: #4f46e5;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Timesheet App</div>
+        <div class="nav-links">
+            <button onclick="goBack()">Back to Dashboard</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="card profile-card">
+            <div class="profile-avatar">
+                <span id="initial">U</span>
+            </div>
+            <h2 id="p-name">Loading...</h2>
+            <p id="p-role" style="color:#7f8c8d; text-transform: uppercase; font-weight:bold; letter-spacing:1px;">Role
+            </p>
+            <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
+            <p><strong>Email:</strong> <span id="p-email">...</span></p>
+        </div>
+    </div>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) window.location.href = 'index.html';
+
+
+        document.getElementById('p-name').innerText = user.name;
+        document.getElementById('p-email').innerText = user.email;
+        document.getElementById('p-role').innerText = user.role;
+        document.getElementById('initial').innerText = user.name.charAt(0).toUpperCase();
+
+        function goBack() {
+            if (user.role === 'manager') window.location.href = 'manager_dashboard.html';
+            else window.location.href = 'employee_dashboard.html';
+        }
+
+        function logout() { localStorage.removeItem('user'); window.location.href = 'index.html'; }
+    </script>
+</body>
+
+</html>

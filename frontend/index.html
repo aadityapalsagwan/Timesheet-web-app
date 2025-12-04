@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- <link rel="stylesheet" href="./CSS/style.css"> -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body.flex-body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            color: #333;
+            background-image:
+                radial-gradient(circle at 15% 25%, rgba(79, 70, 229, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 85% 75%, rgba(236, 72, 153, 0.05) 0%, transparent 25%);
+        }
+
+        .auth-container {
+            background: #ffffff;
+            padding: 45px;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow:
+                0 10px 30px -10px rgba(50, 50, 93, 0.15),
+                0 20px 60px -20px rgba(0, 0, 0, 0.1);
+
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .auth-container:hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 15px 35px -10px rgba(50, 50, 93, 0.2),
+                0 25px 70px -20px rgba(0, 0, 0, 0.15);
+        }
+
+        .auth-container h2 {
+            margin-bottom: 35px;
+            font-weight: 700;
+            color: #111827;
+            font-size: 26px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            background: #f3f4f6;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #333;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: #9ca3af;
+        }
+
+        input:focus {
+            background: #ffffff;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .primary-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.5);
+            filter: brightness(1.1);
+        }
+
+        .primary-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+        }
+
+        .auth-container div {
+            color: #6b7280;
+            margin-top: 25px !important;
+            font-weight: 500;
+        }
+
+        .auth-container a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .auth-container a:hover {
+            color: #7c3aed;
+            text-decoration: underline;
+        }
+
+        #error {
+
+            background-color: #fee2e2 !important;
+            color: #b91c1c !important;
+            border: 1px solid #fecaca;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 20px !important;
+        }
+    </style>
+</head>
+
+<body class="flex-body">
+    <div class="auth-container">
+        <h2>Login Portal</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="handleLogin()" class="primary-btn">Login</button>
+        <div style="margin-top:15px; font-size:14px;">
+            New User? <a href="signup.html">Create Account</a>
+        </div>
+        <p id="error" style="color:red; display:none; margin-top:10px;"></p>
+    </div>
+
+    <script>
+        async function handleLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorP = document.getElementById('error');
+
+            try {
+                const res = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('user', JSON.stringify(data));
+                    if (data.role === 'manager') window.location.href = 'manager_dashboard.html';
+                    else window.location.href = 'employee_dashboard.html';
+                } else {
+                    errorP.innerText = data.msg;
+                    errorP.style.display = 'block';
+                }
+            } catch (err) { console.error(err); }
+        }
+    </script>
+</body>
+
+</html>
